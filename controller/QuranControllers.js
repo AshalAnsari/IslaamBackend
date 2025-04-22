@@ -6,7 +6,28 @@ const getSurah = async (req, res) => {
         if(!id){
             return res.status(500).json({Success:false, Message: "id is missing"})
         }
-        const query = "Select * from QURAN where surahId = ? "
+        const query = "Select * from QURAN where SurahId = ? "
+
+        // console.log("surahId: ", id)
+
+        sql.query(query, [id], (err, data) => {
+            if (err) {
+                return res.status(500).json({Success:false, Error: err });  
+            }
+            return res.status(200).json({Success:true, Data: data });  
+        })
+    }catch(err){
+        return res.status(500).json({Success:false, Error: err})
+    }
+}
+
+const getJuz = async (req, res) => {
+    try{
+        const {id} = req.params
+        if(!id){
+            return res.status(500).json({Success:false, Message: "Juz No is missing"})
+        }
+        const query = "Select * from QURAN where JuzNo = ? "
 
         // console.log("surahId: ", id)
 
@@ -52,6 +73,58 @@ const editAyah = async (req, res) => {
         
     }catch(err){
         return res.status(500).json({Success:false, Message:"Error occured while editing i.e " + err})
+    }
+}
+
+const getABookBySurahId = async (req, res) => {
+    try{
+        const { id } = req.params;
+        console.log(id)
+
+        if(!id){
+            return res.statur(404).json({Success: false, Error: "Surah No is Missing"})
+        }
+
+        const query = "Select * from Book where SurahId = ?";
+
+        sql.query(
+            query,
+            [id],
+            (err, data) => {
+                if(err){
+                    return res.status(404).json({Success:false, Error: err})
+                }
+                return res.status(200).json({Success:true, Data: data})
+            }
+        )
+    }catch(err){
+        return res.status(500).json({Success: false, Error: err})
+    }
+}
+
+const getABookByJuzNo = async (req, res) => {
+    try{
+        const { id } = req.params;
+        console.log(id)
+
+        if(!id){
+            return res.statur(404).json({Success: false, Error: "Juz No is Missing"})
+        }
+
+        const query = "Select * from Book where JuzNo = ?";
+
+        sql.query(
+            query,
+            [id],
+            (err, data) => {
+                if(err){
+                    return res.status(404).json({Success:false, Error: err})
+                }
+                return res.status(200).json({Success:true, Data: data})
+            }
+        )
+    }catch(err){
+        return res.status(500).json({Success: false, Error: err})
     }
 }
 
@@ -185,8 +258,11 @@ const addBookData = async (req, res) => {
 
 module.exports = {
     getSurah,
+    getJuz,
     editAyah,
     getBookData,
     addBookData,
+    getABookBySurahId,
+    getABookByJuzNo
 }
 
