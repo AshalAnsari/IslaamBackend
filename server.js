@@ -3,21 +3,24 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const sql = require("./utils/sqlDB")
 const quranRoutes = require("./routes/QuranRoutes")
+const hadeesRoutes = require("./routes/HadeesRoutes")
 
 dotenv.config()
 
 const app = express()
 
-const allowedOrigin = 'https://islam247.netlify.app';
+// const allowedOrigin = 'https://islam247.netlify.app';
 
-app.use(cors({
-  origin: allowedOrigin,
-  credentials: true, // if you're using cookies or auth headers
-}));
+// app.use(cors({
+//   origin: allowedOrigin,
+//   credentials: true, // if you're using cookies or auth headers
+// }));
 
+app.use(cors())
 app.use(express.json())
 
 app.use("/quran", quranRoutes)
+app.use("/hadees", hadeesRoutes)
 
 sql.connect((err) => {
     if (err) {
